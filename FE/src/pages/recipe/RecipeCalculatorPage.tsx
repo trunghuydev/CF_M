@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -150,7 +150,9 @@ export const RecipeCalculatorPage = () => {
                       className="flex justify-between items-center p-3 rounded-lg bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 shadow-sm">
                       <div className="flex items-center gap-2">
                         {!ingredient.isScalable && (
-                          <Clock size={14} className="text-muted-foreground flex-shrink-0" title="Không thay đổi theo tỷ lệ" />
+                          <span title="Không thay đổi theo tỷ lệ" className="flex items-center">
+                            <Clock size={14} className="text-muted-foreground flex-shrink-0" />
+                          </span>
                         )}
                         <span className="font-medium">{ingredient.name}</span>
                       </div>

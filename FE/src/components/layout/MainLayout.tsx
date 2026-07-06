@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { Coffee, LogOut, LogIn, BookOpen, Calculator, Settings } from 'lucide-react';
