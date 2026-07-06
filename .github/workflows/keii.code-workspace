@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "../../.."
+		},
+		{
+			"path": "../../../../keii"
+		}
+	],
+	"settings": {
+		"spring.defaultSolution": "Coffe_MN"
+	}
+}
