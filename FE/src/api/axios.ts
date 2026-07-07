@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Vite đọc VITE_API_URL từ:
 //   yarn dev   → .env.development  (http://localhost:8080/api)
-//   yarn build → .env.production   (http://160.191.237.191:8080/api)
+//   yarn build → .env.production a  (http://160.191.237.191:8080/api)
 // Nếu không có env → fallback về VPS
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://160.191.237.191:8080/api';
 
