@@ -1,15 +1,19 @@
 import axios from 'axios';
-import { API_BASE_URL } from '@/config/api';
+
+// Vite đọc VITE_API_URL từ:
+//   yarn dev   → .env.development  (http://localhost:8080/api)
+//   yarn build → .env.production   (http://160.191.237.191:8080/api)
+// Nếu không có env → fallback về VPS
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://160.191.237.191:8080/api';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 10_000, // 10s timeout — tránh hang request
+  timeout: 10_000,
 });
 
-// ─── Request interceptor: đính kèm JWT token ───────────────────────
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
@@ -21,7 +25,6 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// ─── Response interceptor: xử lý 401 Unauthorized ─────────────────
 api.interceptors.response.use(
   (response) => response,
   (error) => {
