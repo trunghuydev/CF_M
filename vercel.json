@@ -1,0 +1,11 @@
+{
+  "buildCommand": "cd FE && yarn install && yarn build",
+  "outputDirectory": "FE/dist",
+  "installCommand": "echo skip",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
