@@ -1,7 +1,8 @@
 {
-  "buildCommand": "cd FE && yarn install && yarn build",
-  "outputDirectory": "FE/dist",
-  "installCommand": "echo skip",
+  "rootDirectory": "FE",
+  "buildCommand": "yarn build",
+  "outputDirectory": "dist",
+  "installCommand": "yarn install",
   "rewrites": [
     {
       "source": "/(.*)",
