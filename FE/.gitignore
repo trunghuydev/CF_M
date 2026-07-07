@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Environment — local overrides chứa secret (KHÔNG commit)
+# .env.development và .env.production được commit vì không chứa secret
+.env.local
+.env.*.local
