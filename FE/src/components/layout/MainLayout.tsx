@@ -1,4 +1,4 @@
-import { Outlet, Link, useLocation } from 'react-router-dom';
+import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { LogOut, LogIn, BookOpen, Calculator, Settings, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -11,6 +11,12 @@ const navItems = [
 export const MainLayout = () => {
   const { user, isAuthenticated, logout, loading } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await logout(); // Gọi API revoke cookie phía server
+    navigate('/login', { replace: true });
+  };
 
   if (loading) return (
     <div className="min-h-screen flex items-center justify-center bg-zinc-50 dark:bg-zinc-950">
@@ -67,7 +73,7 @@ export const MainLayout = () => {
                   <p className="text-[10px] text-amber-600 dark:text-amber-400 font-semibold">{user?.role === 'ADMIN' ? 'Quản trị viên' : 'Nhân viên'}</p>
                 </div>
               </div>
-              <Button variant="outline" size="sm" className="w-full justify-start gap-2 text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20 text-xs h-8" onClick={logout}>
+              <Button variant="outline" size="sm" className="w-full justify-start gap-2 text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20 text-xs h-8" onClick={handleLogout}>
                 <LogOut size={14} />Đăng xuất
               </Button>
             </>
@@ -88,7 +94,7 @@ export const MainLayout = () => {
         </div>
         <span className="text-sm font-bold text-zinc-900 dark:text-zinc-50 flex-1">Tori Coffee</span>
         {isAuthenticated ? (
-          <button onClick={logout} className="text-xs text-red-500 font-medium flex items-center gap-1">
+          <button onClick={handleLogout} className="text-xs text-red-500 font-medium flex items-center gap-1">
             <LogOut size={14} />
           </button>
         ) : (

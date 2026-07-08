@@ -31,7 +31,8 @@ export const LoginPage = () => {
     try {
       setLoading(true);
       const res = await api.post('/auth/login', values);
-      login(res.data.token, res.data.user);
+      // API mới trả về accessToken (thay vì token cũ)
+      login(res.data.accessToken, res.data.user);
       toast('success', 'Đăng nhập thành công!');
       navigate('/');
     } catch (err: any) {
