@@ -10,6 +10,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import api from '@/api/axios';
 import { Coffee } from 'lucide-react';
+import { useToast } from '@/context/ToastContext';
 
 const loginSchema = z.object({
   email: z.string().email({ message: 'Email không hợp lệ' }),
@@ -17,9 +18,9 @@ const loginSchema = z.object({
 });
 
 export const LoginPage = () => {
-  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { toast } = useToast();
   const { login } = useAuth();
 
   const form = useForm<z.infer<typeof loginSchema>>({
@@ -29,13 +30,14 @@ export const LoginPage = () => {
 
   const onSubmit = async (values: z.infer<typeof loginSchema>) => {
     try {
-      setError('');
       setLoading(true);
       const res = await api.post('/auth/login', values);
       login(res.data.token, res.data.user);
+      toast('success', `Chào mừng trở lại!`);
       navigate('/');
-    } catch (err) {
-      setError('Email hoặc mật khẩu không đúng. Vui lòng thử lại.');
+    } catch (err: any) {
+      const msg = err?.response?.data?.message || 'Email hoặc mật khẩu không đúng.';
+      toast('error', msg);
     } finally {
       setLoading(false);
     }
@@ -80,7 +82,7 @@ export const LoginPage = () => {
                   </FormItem>
                 )}
               />
-              {error && <p className="text-sm font-medium text-destructive text-center">{error}</p>}
+
               <Button type="submit" disabled={loading} className="w-full bg-amber-600 hover:bg-amber-700 text-white">
                 {loading ? 'Đang đăng nhập...' : 'Đăng nhập'}
               </Button>
