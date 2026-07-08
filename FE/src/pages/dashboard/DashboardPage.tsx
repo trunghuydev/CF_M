@@ -37,13 +37,13 @@ const RecipeModal = ({ open, onClose, initialData, categories, editId }: { open:
 
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm">
-      <div className="bg-white dark:bg-zinc-900 rounded-t-2xl sm:rounded-2xl shadow-2xl w-full sm:max-w-2xl max-h-[92vh] flex flex-col">
-        <div className="flex items-center justify-between p-4 sm:p-6 border-b border-zinc-200 dark:border-zinc-800">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-0 sm:p-4">
+      <div className="bg-white dark:bg-zinc-900 rounded-t-2xl sm:rounded-2xl shadow-2xl w-full sm:max-w-2xl max-h-[85dvh] flex flex-col overflow-hidden min-h-0">
+        <div className="flex items-center justify-between p-4 sm:p-6 border-b border-zinc-200 dark:border-zinc-800 shrink-0">
           <h2 className="text-lg sm:text-xl font-bold">{editId ? 'Chỉnh sửa công thức' : 'Thêm công thức mới'}</h2>
           <button onClick={onClose}><X size={22} className="text-zinc-400" /></button>
         </div>
-        <div className="overflow-y-auto flex-1 p-4 sm:p-6 space-y-4">
+        <div className="overflow-y-auto flex-1 p-4 sm:p-6 space-y-4 min-h-0">
           <div>
             <Label>Tên đồ uống *</Label>
             <Input className="mt-1" placeholder="VD: Cà phê sữa đá" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
@@ -103,7 +103,7 @@ const RecipeModal = ({ open, onClose, initialData, categories, editId }: { open:
             ))}
           </div>
         </div>
-        <div className="flex gap-3 p-4 sm:p-6 border-t border-zinc-200 dark:border-zinc-800">
+        <div className="flex gap-3 p-4 sm:p-6 border-t border-zinc-200 dark:border-zinc-800 shrink-0 bg-white dark:bg-zinc-900">
           <Button variant="outline" className="flex-1" onClick={onClose}>Hủy</Button>
           <Button className="flex-1 bg-amber-600 hover:bg-amber-700 text-white" disabled={save.isPending || !form.name.trim()} onClick={() => save.mutate(form)}>
             {save.isPending ? 'Đang lưu...' : (editId ? 'Cập nhật' : 'Tạo công thức')}
