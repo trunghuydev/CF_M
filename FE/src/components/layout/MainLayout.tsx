@@ -1,6 +1,6 @@
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
-import { Coffee, LogOut, LogIn, BookOpen, Calculator, Settings, User } from 'lucide-react';
+import { LogOut, LogIn, BookOpen, Calculator, Settings, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const navItems = [
@@ -27,8 +27,8 @@ export const MainLayout = () => {
       <aside className="hidden md:flex w-64 bg-white dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-800 flex-col shrink-0 h-screen sticky top-0">
         {/* Logo */}
         <div className="p-5 flex items-center gap-3 border-b border-zinc-100 dark:border-zinc-800">
-          <div className="w-9 h-9 bg-amber-600 rounded-xl flex items-center justify-center flex-shrink-0">
-            <Coffee size={20} className="text-white" />
+          <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden border border-amber-200 dark:border-amber-900 shadow-sm">
+            <img src="/tori_icon.png" alt="Tori Coffee" className="w-full h-full object-cover" />
           </div>
           <div>
             <p className="text-sm font-bold text-zinc-900 dark:text-zinc-50 leading-tight">Tori Coffee</p>
@@ -83,8 +83,8 @@ export const MainLayout = () => {
 
       {/* ── Mobile Top Bar ──────────────────────────────────────────── */}
       <div className="md:hidden bg-white dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800 px-4 py-3 flex items-center gap-3 sticky top-0 z-40">
-        <div className="w-8 h-8 bg-amber-600 rounded-lg flex items-center justify-center flex-shrink-0">
-          <Coffee size={16} className="text-white" />
+        <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden border border-amber-200 dark:border-amber-900 shadow-sm">
+          <img src="/tori_icon.png" alt="Tori Coffee" className="w-full h-full object-cover" />
         </div>
         <span className="text-sm font-bold text-zinc-900 dark:text-zinc-50 flex-1">Tori Coffee</span>
         {isAuthenticated ? (

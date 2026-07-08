@@ -19,7 +19,7 @@ export default defineConfig(({ mode }) => {
         devOptions: {
           enabled: true, // Bật PWA cả trong dev để test
         },
-        includeAssets: ["favicon.svg", "apple-touch-icon.png", "icon-192.png", "icon-512.png"],
+        includeAssets: ["tori_icon.png"],
         manifest: {
           name: "Tori Coffee",
           short_name: "Tori Coffee",
@@ -33,19 +33,19 @@ export default defineConfig(({ mode }) => {
           lang: "vi",
           icons: [
             {
-              src: "icon-192.png",
+              src: "tori_icon.png",
               sizes: "192x192",
               type: "image/png",
               purpose: "any",
             },
             {
-              src: "icon-512.png",
+              src: "tori_icon.png",
               sizes: "512x512",
               type: "image/png",
               purpose: "any",
             },
             {
-              src: "icon-512.png",
+              src: "tori_icon.png",
               sizes: "512x512",
               type: "image/png",
               purpose: "maskable",
@@ -54,6 +54,7 @@ export default defineConfig(({ mode }) => {
           categories: ["food", "productivity", "utilities"],
         },
         workbox: {
+          maximumFileSizeToCacheInBytes: 10 * 1024 * 1024, // 10MB
           globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2}"],
           cleanupOutdatedCaches: true,
           runtimeCaching: [

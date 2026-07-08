@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import api from '@/api/axios';
-import { Coffee, Lock, Mail } from 'lucide-react';
+import { Lock, Mail } from 'lucide-react';
 import { useToast } from '@/context/ToastContext';
 
 const loginSchema = z.object({
@@ -47,8 +47,8 @@ export const LoginPage = () => {
       <div className="w-full max-w-sm">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="w-14 h-14 bg-amber-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-amber-200 dark:shadow-amber-900/50">
-            <Coffee size={30} className="text-white" />
+          <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 overflow-hidden border-2 border-amber-200 dark:border-amber-900 shadow-lg shadow-amber-200 dark:shadow-amber-900/50">
+            <img src="/tori_icon.png" alt="Tori Coffee" className="w-full h-full object-cover" />
           </div>
           <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">Tori Coffee</h1>
           <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">Đăng nhập để quản trị hệ thống</p>
