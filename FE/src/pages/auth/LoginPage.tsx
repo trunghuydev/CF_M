@@ -50,7 +50,7 @@ export const LoginPage = () => {
           <div className="w-14 h-14 bg-amber-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-amber-200 dark:shadow-amber-900/50">
             <Coffee size={30} className="text-white" />
           </div>
-          <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">Coffee Manager</h1>
+          <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">Tori Coffee</h1>
           <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">Đăng nhập để quản trị hệ thống</p>
         </div>
 

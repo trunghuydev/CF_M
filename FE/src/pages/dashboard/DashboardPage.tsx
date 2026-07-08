@@ -37,11 +37,11 @@ const RecipeModal = ({ open, onClose, initialData, categories, editId }: { open:
 
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-0 sm:p-4">
-      <div className="bg-white dark:bg-zinc-900 rounded-t-2xl sm:rounded-2xl shadow-2xl w-full sm:max-w-2xl max-h-[85dvh] flex flex-col overflow-hidden min-h-0">
+    <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-0 sm:p-4">
+      <div className="bg-white dark:bg-zinc-900 rounded-t-2xl sm:rounded-2xl shadow-2xl w-full sm:max-w-2xl max-h-[88dvh] sm:max-h-[85vh] flex flex-col overflow-hidden min-h-0">
         <div className="flex items-center justify-between p-4 sm:p-6 border-b border-zinc-200 dark:border-zinc-800 shrink-0">
           <h2 className="text-lg sm:text-xl font-bold">{editId ? 'Chỉnh sửa công thức' : 'Thêm công thức mới'}</h2>
-          <button onClick={onClose}><X size={22} className="text-zinc-400" /></button>
+          <button onClick={onClose} className="p-1 text-zinc-400 hover:text-zinc-600"><X size={22} /></button>
         </div>
         <div className="overflow-y-auto flex-1 p-4 sm:p-6 space-y-4 min-h-0">
           <div>
@@ -65,25 +65,29 @@ const RecipeModal = ({ open, onClose, initialData, categories, editId }: { open:
           <div>
             <div className="flex items-center justify-between mb-2">
               <h3 className="font-semibold text-sm">Nguyên liệu</h3>
-              <Button size="sm" variant="outline" onClick={() => setForm(f => ({ ...f, ingredients: [...f.ingredients, { name: '', quantity: '', unit: 'ml', isScalable: true, isInputAllowed: false, displayOrder: f.ingredients.length + 1 }] }))} className="gap-1 text-xs h-7"><Plus size={12} />Thêm</Button>
+              <Button size="sm" variant="outline" type="button" onClick={() => setForm(f => ({ ...f, ingredients: [...f.ingredients, { name: '', quantity: '', unit: 'ml', isScalable: true, isInputAllowed: false, displayOrder: f.ingredients.length + 1 }] }))} className="gap-1 text-xs h-7"><Plus size={12} />Thêm</Button>
             </div>
             {form.ingredients.map((ing, i) => (
-              <div key={i} className="mb-2 p-3 bg-zinc-50 dark:bg-zinc-800/50 rounded-lg border border-zinc-200 dark:border-zinc-700 space-y-2">
-                <div className="grid grid-cols-12 gap-2 items-center">
-                  <div className="col-span-5"><Input placeholder="Tên nguyên liệu" value={ing.name} onChange={e => upIng(i, 'name', e.target.value)} /></div>
-                  <div className="col-span-3"><Input type="number" placeholder="SL" value={ing.quantity} onChange={e => upIng(i, 'quantity', e.target.value)} /></div>
-                  <div className="col-span-3">
-                    <select className="w-full h-9 rounded-md border border-input bg-background px-2 text-sm" value={ing.unit} onChange={e => upIng(i, 'unit', e.target.value)}>
+              <div key={i} className="mb-2.5 p-3 bg-zinc-50 dark:bg-zinc-800/50 rounded-xl border border-zinc-200 dark:border-zinc-700 space-y-2.5">
+                <div className="flex items-center gap-2">
+                  <Input placeholder="Tên nguyên liệu (VD: Sữa đặc, Cà phê...)" className="flex-1 text-sm h-9 bg-white dark:bg-zinc-900" value={ing.name} onChange={e => upIng(i, 'name', e.target.value)} />
+                  {form.ingredients.length > 1 && (
+                    <button type="button" onClick={() => setForm(f => ({ ...f, ingredients: f.ingredients.filter((_, idx) => idx !== i) }))} className="w-8 h-9 flex items-center justify-center text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg shrink-0">
+                      <X size={18} />
+                    </button>
+                  )}
+                </div>
+                <div className="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-zinc-200/60 dark:border-zinc-700/60">
+                  <div className="flex items-center gap-2">
+                    <Input type="number" inputMode="decimal" placeholder="SL" className="w-24 text-sm h-9 bg-white dark:bg-zinc-900 font-semibold tabular-nums" value={ing.quantity} onChange={e => upIng(i, 'quantity', e.target.value)} />
+                    <select className="h-9 rounded-md border border-input bg-white dark:bg-zinc-900 px-2 text-sm font-medium" value={ing.unit} onChange={e => upIng(i, 'unit', e.target.value)}>
                       {UNITS.map(u => <option key={u}>{u}</option>)}
                     </select>
                   </div>
-                  <div className="col-span-1 flex justify-end">
-                    {form.ingredients.length > 1 && <button onClick={() => setForm(f => ({ ...f, ingredients: f.ingredients.filter((_, idx) => idx !== i) }))}><X size={16} className="text-red-400" /></button>}
+                  <div className="flex items-center gap-3 ml-auto text-xs font-medium text-zinc-600 dark:text-zinc-300">
+                    <label className="flex items-center gap-1 cursor-pointer select-none"><input type="checkbox" className="rounded border-zinc-300 text-amber-600 focus:ring-amber-500" checked={ing.isScalable} onChange={e => upIng(i, 'isScalable', e.target.checked)} />Nhân tỷ lệ</label>
+                    <label className="flex items-center gap-1 cursor-pointer select-none"><input type="checkbox" className="rounded border-zinc-300 text-amber-600 focus:ring-amber-500" checked={ing.isInputAllowed} onChange={e => upIng(i, 'isInputAllowed', e.target.checked)} />Nhập tay</label>
                   </div>
-                </div>
-                <div className="flex gap-4 text-xs">
-                  <label className="flex items-center gap-1.5 cursor-pointer"><input type="checkbox" checked={ing.isScalable} onChange={e => upIng(i, 'isScalable', e.target.checked)} />Nhân theo tỷ lệ</label>
-                  <label className="flex items-center gap-1.5 cursor-pointer"><input type="checkbox" checked={ing.isInputAllowed} onChange={e => upIng(i, 'isInputAllowed', e.target.checked)} />Cho nhập tay</label>
                 </div>
               </div>
             ))}
@@ -92,20 +96,25 @@ const RecipeModal = ({ open, onClose, initialData, categories, editId }: { open:
           <div>
             <div className="flex items-center justify-between mb-2">
               <h3 className="font-semibold text-sm">Các bước pha chế</h3>
-              <Button size="sm" variant="outline" onClick={() => setForm(f => ({ ...f, steps: [...f.steps, { stepOrder: f.steps.length + 1, content: '' }] }))} className="gap-1 text-xs h-7"><Plus size={12} />Thêm</Button>
+              <Button size="sm" variant="outline" type="button" onClick={() => setForm(f => ({ ...f, steps: [...f.steps, { stepOrder: f.steps.length + 1, content: '' }] }))} className="gap-1 text-xs h-7"><Plus size={12} />Thêm</Button>
             </div>
             {form.steps.map((step, i) => (
               <div key={i} className="flex gap-2 items-center mb-2">
                 <span className="w-7 h-9 flex items-center justify-center text-sm font-bold text-amber-600 bg-amber-50 dark:bg-amber-950/30 rounded-md border border-amber-200 flex-shrink-0">{i + 1}</span>
-                <Input placeholder={`Bước ${i + 1}...`} value={step.content} onChange={e => upStep(i, e.target.value)} />
-                {form.steps.length > 1 && <button onClick={() => setForm(f => ({ ...f, steps: f.steps.filter((_, idx) => idx !== i) }))}><X size={16} className="text-red-400" /></button>}
+                <Input placeholder={`Bước ${i + 1}...`} className="flex-1 text-sm h-9 bg-white dark:bg-zinc-900" value={step.content} onChange={e => upStep(i, e.target.value)} />
+                {form.steps.length > 1 && (
+                  <button type="button" onClick={() => setForm(f => ({ ...f, steps: f.steps.filter((_, idx) => idx !== i) }))} className="w-8 h-9 flex items-center justify-center text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg shrink-0">
+                    <X size={18} />
+                  </button>
+                )}
               </div>
             ))}
           </div>
         </div>
-        <div className="flex gap-3 p-4 sm:p-6 border-t border-zinc-200 dark:border-zinc-800 shrink-0 bg-white dark:bg-zinc-900">
-          <Button variant="outline" className="flex-1" onClick={onClose}>Hủy</Button>
-          <Button className="flex-1 bg-amber-600 hover:bg-amber-700 text-white" disabled={save.isPending || !form.name.trim()} onClick={() => save.mutate(form)}>
+        <div className="flex gap-3 p-4 sm:p-6 border-t border-zinc-200 dark:border-zinc-800 shrink-0 bg-white dark:bg-zinc-900"
+             style={{ paddingBottom: 'max(1.25rem, env(safe-area-inset-bottom))' }}>
+          <Button variant="outline" className="flex-1 h-11 text-sm font-semibold rounded-xl" type="button" onClick={onClose}>Hủy</Button>
+          <Button className="flex-1 h-11 bg-amber-600 hover:bg-amber-700 text-white text-sm font-semibold rounded-xl shadow-lg shadow-amber-600/20" type="button" disabled={save.isPending || !form.name.trim()} onClick={() => save.mutate(form)}>
             {save.isPending ? 'Đang lưu...' : (editId ? 'Cập nhật' : 'Tạo công thức')}
           </Button>
         </div>
@@ -116,7 +125,7 @@ const RecipeModal = ({ open, onClose, initialData, categories, editId }: { open:
 
 // ─── Delete Confirm ──────────────────────────────────────────────────
 const ConfirmDelete = ({ title, onConfirm, onClose, loading }: { title: string; onConfirm: () => void; onClose: () => void; loading: boolean }) => (
-  <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+  <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
     <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl w-full max-w-sm p-6 space-y-4">
       <div className="flex items-center gap-3 text-red-600"><AlertTriangle size={24} /><h2 className="text-lg font-bold">Xác nhận xóa</h2></div>
       <p className="text-sm text-zinc-600 dark:text-zinc-400">Bạn có chắc muốn xóa <strong>"{title}"</strong>? Hành động này không thể hoàn tác.</p>

@@ -21,9 +21,9 @@ export default defineConfig(({ mode }) => {
         },
         includeAssets: ["favicon.svg", "apple-touch-icon.png", "icon-192.png", "icon-512.png"],
         manifest: {
-          name: "Coffee Manager - Sổ Công Thức",
-          short_name: "Coffee",
-          description: "Sổ công thức pha chế — tra cứu nhanh trên điện thoại",
+          name: "Tori Coffee",
+          short_name: "Tori Coffee",
+          description: "Sổ công thức pha chế Tori Coffee — tra cứu nhanh trên điện thoại",
           theme_color: "#d97706",
           background_color: "#fafaf9",
           display: "standalone",

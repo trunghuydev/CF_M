@@ -31,7 +31,7 @@ export const MainLayout = () => {
             <Coffee size={20} className="text-white" />
           </div>
           <div>
-            <p className="text-sm font-bold text-zinc-900 dark:text-zinc-50 leading-tight">Coffee Manager</p>
+            <p className="text-sm font-bold text-zinc-900 dark:text-zinc-50 leading-tight">Tori Coffee</p>
             <p className="text-xs text-zinc-400">Hệ thống pha chế</p>
           </div>
         </div>
@@ -86,7 +86,7 @@ export const MainLayout = () => {
         <div className="w-8 h-8 bg-amber-600 rounded-lg flex items-center justify-center flex-shrink-0">
           <Coffee size={16} className="text-white" />
         </div>
-        <span className="text-sm font-bold text-zinc-900 dark:text-zinc-50 flex-1">Coffee Manager</span>
+        <span className="text-sm font-bold text-zinc-900 dark:text-zinc-50 flex-1">Tori Coffee</span>
         {isAuthenticated ? (
           <button onClick={logout} className="text-xs text-red-500 font-medium flex items-center gap-1">
             <LogOut size={14} />
@@ -102,7 +102,7 @@ export const MainLayout = () => {
       </main>
 
       {/* ── Mobile Bottom Nav ───────────────────────────────────────── */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-zinc-900 border-t border-zinc-200 dark:border-zinc-800 flex z-50"
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-zinc-900 border-t border-zinc-200 dark:border-zinc-800 flex z-30"
            style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
         {navItems.map(({ to, icon: Icon, mobileLabel }) => (
           <Link
