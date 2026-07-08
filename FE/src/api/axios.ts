@@ -1,25 +1,19 @@
 import axios from 'axios';
 
-// Vite đọc VITE_API_URL từ:
-//   yarn dev   → .env.development  (http://localhost:8080/api)
-//   yarn build → .env.production a  (http://160.191.237.191:8080/api)
-// Nếu không có env → fallback về VPS
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://160.191.237.191:8080/api';
+// Production (Vercel): VITE_API_URL = /api  → proxy qua vercel.json → VPS
+// Development (local): VITE_API_URL = http://localhost:8080/api
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  timeout: 10_000,
+  headers: { 'Content-Type': 'application/json' },
+  timeout: 15_000,
 });
 
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
-    if (token && config.headers) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
+    if (token && config.headers) config.headers.Authorization = `Bearer ${token}`;
     return config;
   },
   (error) => Promise.reject(error)

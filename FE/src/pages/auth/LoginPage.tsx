@@ -1,4 +1,4 @@
-import  { useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -6,10 +6,9 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import api from '@/api/axios';
-import { Coffee } from 'lucide-react';
+import { Coffee, Lock, Mail } from 'lucide-react';
 import { useToast } from '@/context/ToastContext';
 
 const loginSchema = z.object({
@@ -33,7 +32,7 @@ export const LoginPage = () => {
       setLoading(true);
       const res = await api.post('/auth/login', values);
       login(res.data.token, res.data.user);
-      toast('success', `Chào mừng trở lại!`);
+      toast('success', 'Đăng nhập thành công!');
       navigate('/');
     } catch (err: any) {
       const msg = err?.response?.data?.message || 'Email hoặc mật khẩu không đúng.';
@@ -44,16 +43,19 @@ export const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-zinc-50 dark:bg-zinc-950 p-4">
-      <Card className="w-full max-w-md shadow-xl border-zinc-200 dark:border-zinc-800">
-        <CardHeader className="space-y-3 items-center text-center">
-          <div className="w-12 h-12 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mb-2">
-            <Coffee size={28} />
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-amber-50 to-zinc-100 dark:from-zinc-950 dark:to-zinc-900 p-4">
+      <div className="w-full max-w-sm">
+        {/* Logo */}
+        <div className="text-center mb-8">
+          <div className="w-14 h-14 bg-amber-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-amber-200 dark:shadow-amber-900/50">
+            <Coffee size={30} className="text-white" />
           </div>
-          <CardTitle className="text-2xl font-bold">Coffee Manager</CardTitle>
-          <CardDescription>Đăng nhập với tài khoản Quản trị viên</CardDescription>
-        </CardHeader>
-        <CardContent>
+          <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">Coffee Manager</h1>
+          <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">Đăng nhập để quản trị hệ thống</p>
+        </div>
+
+        {/* Form Card */}
+        <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-xl border border-zinc-200 dark:border-zinc-800 p-6">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField
@@ -61,9 +63,19 @@ export const LoginPage = () => {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel className="text-sm font-medium">Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="admin@coffee.com" {...field} />
+                      <div className="relative">
+                        <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
+                        <Input
+                          placeholder="admin@coffee.com"
+                          className="pl-9 h-11"
+                          inputMode="email"
+                          autoCapitalize="none"
+                          autoComplete="email"
+                          {...field}
+                        />
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -74,25 +86,43 @@ export const LoginPage = () => {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Mật khẩu</FormLabel>
+                    <FormLabel className="text-sm font-medium">Mật khẩu</FormLabel>
                     <FormControl>
-                      <Input type="password" placeholder="••••••••" {...field} />
+                      <div className="relative">
+                        <Lock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
+                        <Input
+                          type="password"
+                          placeholder="••••••••"
+                          className="pl-9 h-11"
+                          autoComplete="current-password"
+                          {...field}
+                        />
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-
-              <Button type="submit" disabled={loading} className="w-full bg-amber-600 hover:bg-amber-700 text-white">
-                {loading ? 'Đang đăng nhập...' : 'Đăng nhập'}
+              <Button
+                type="submit"
+                disabled={loading}
+                className="w-full h-11 bg-amber-600 hover:bg-amber-700 active:bg-amber-800 text-white font-semibold rounded-xl transition-all mt-2"
+              >
+                {loading ? (
+                  <span className="flex items-center gap-2">
+                    <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                    Đang đăng nhập...
+                  </span>
+                ) : 'Đăng nhập'}
               </Button>
             </form>
           </Form>
-        </CardContent>
-        <CardFooter className="justify-center text-sm text-muted-foreground">
-          <p>Hệ thống quản lý công thức pha chế nội bộ</p>
-        </CardFooter>
-      </Card>
+        </div>
+
+        <p className="text-center text-xs text-zinc-400 mt-5">
+          Hệ thống quản lý công thức pha chế nội bộ
+        </p>
+      </div>
     </div>
   );
 };
