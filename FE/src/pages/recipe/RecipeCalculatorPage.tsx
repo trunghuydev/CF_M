@@ -51,7 +51,7 @@ export const RecipeCalculatorPage = () => {
   const hasSteps = (activeRecipe.steps?.length || 0) > 0;
 
   return (
-    <div className="max-w-3xl mx-auto space-y-4">
+    <div className="max-w-3xl mx-auto space-y-3">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -64,43 +64,53 @@ export const RecipeCalculatorPage = () => {
         </div>
       </div>
 
-      {/* Recipe Selector — horizontal scroll chips */}
-      <div className="flex gap-2 overflow-x-auto pb-1 -mx-4 px-4 scrollbar-hide">
-        {recipes.map(recipe => (
-          <button
-            key={recipe.id}
-            onClick={() => { setSelectedRecipeId(recipe.id); setScaleFactor(1); setInputs({}); setShowSteps(false); }}
-            className={`flex-shrink-0 px-3.5 py-2 rounded-full text-sm font-medium transition-all ${activeRecipe.id === recipe.id
-              ? 'bg-amber-600 text-white shadow-sm'
-              : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 hover:bg-zinc-200'
-            }`}
-          >
-            {recipe.name}
-          </button>
-        ))}
+      {/* Recipe Selector — native dropdown, mobile-friendly */}
+      <div className="relative">
+        <select
+          value={activeRecipe.id}
+          onChange={e => {
+            const id = Number(e.target.value);
+            setSelectedRecipeId(id);
+            setScaleFactor(1);
+            setInputs({});
+            setShowSteps(false);
+          }}
+          className="w-full h-12 appearance-none rounded-xl border-2 border-amber-200 dark:border-amber-900 bg-white dark:bg-zinc-900 px-4 pr-10 text-sm font-semibold text-zinc-800 dark:text-zinc-100 shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors cursor-pointer"
+        >
+          {recipes.map(recipe => (
+            <option key={recipe.id} value={recipe.id}>
+              {recipe.name}
+            </option>
+          ))}
+        </select>
+        <ChevronDown size={18} className="absolute right-3 top-1/2 -translate-y-1/2 text-amber-600 pointer-events-none" />
       </div>
 
-      {/* Main card */}
+      {/* Main card — compact for mobile */}
       <Card className="border-amber-200 dark:border-amber-900/50 shadow-sm overflow-hidden">
-        {/* Recipe name header */}
-        <div className="bg-amber-50 dark:bg-amber-950/20 border-b border-amber-100 dark:border-amber-900/50 px-4 py-3">
-          <h2 className="text-base sm:text-lg font-bold text-amber-800 dark:text-amber-400">{activeRecipe.name}</h2>
-          {activeRecipe.ingredients?.length && (
-            <p className="text-xs text-amber-600/70 dark:text-amber-500/70 mt-0.5">{activeRecipe.ingredients.length} nguyên liệu</p>
+        {/* Recipe subtitle strip */}
+        <div className="bg-amber-50 dark:bg-amber-950/20 border-b border-amber-100 dark:border-amber-900/50 px-4 py-2 flex items-center justify-between">
+          <p className="text-xs font-semibold text-amber-700 dark:text-amber-400 uppercase tracking-wide">
+            {activeRecipe.ingredients?.length || 0} nguyên liệu
+          </p>
+          {(activeRecipe as any).category && (
+            <span className="text-xs bg-amber-200/60 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400 px-2 py-0.5 rounded-full font-medium">
+              {(activeRecipe as any).category.name}
+            </span>
           )}
         </div>
 
-        <CardContent className="p-4 space-y-5">
+        <CardContent className="p-3 sm:p-4 space-y-4">
           {/* Input section */}
           {inputIngredients.length > 0 ? (
-            <div className="space-y-3">
-              <h3 className="font-semibold text-sm flex items-center gap-2 text-zinc-700 dark:text-zinc-300">
-                <Scale size={16} className="text-amber-600" />Nhập số lượng mục tiêu
+            <div className="space-y-2">
+              <h3 className="font-semibold text-xs uppercase tracking-wide flex items-center gap-1.5 text-zinc-500 dark:text-zinc-400">
+                <Scale size={13} className="text-amber-600" />Nhập số lượng mục tiêu
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {inputIngredients.map(ingredient => (
-                  <div key={ingredient.id} className="space-y-1.5 bg-zinc-50 dark:bg-zinc-900/50 p-3 rounded-lg border border-zinc-100 dark:border-zinc-800">
-                    <Label htmlFor={`input-${ingredient.id}`} className="text-sm">
+                  <div key={ingredient.id} className="flex items-center gap-2 bg-zinc-50 dark:bg-zinc-900/50 pl-3 pr-2 py-2 rounded-lg border border-zinc-100 dark:border-zinc-800">
+                    <Label htmlFor={`input-${ingredient.id}`} className="text-sm font-medium flex-1 truncate">
                       {ingredient.name} <span className="text-muted-foreground font-normal text-xs">({ingredient.unit})</span>
                     </Label>
                     <Input
@@ -109,10 +119,10 @@ export const RecipeCalculatorPage = () => {
                       min="0.1"
                       step="0.1"
                       inputMode="decimal"
-                      placeholder={`Mặc định: ${ingredient.quantity}`}
+                      placeholder={`${ingredient.quantity}`}
                       value={inputs[ingredient.id!] || ''}
                       onChange={e => handleInputChange(ingredient.id!, Number(ingredient.quantity), e.target.value)}
-                      className="text-base font-medium bg-white dark:bg-zinc-950 h-10"
+                      className="w-24 text-right text-base font-semibold bg-white dark:bg-zinc-950 h-9 flex-shrink-0 tabular-nums"
                     />
                   </div>
                 ))}
@@ -124,12 +134,12 @@ export const RecipeCalculatorPage = () => {
             </p>
           )}
 
-          {/* Result — ingredient list */}
-          <div className="space-y-3">
-            <h3 className="font-semibold text-sm flex items-center gap-2 text-zinc-700 dark:text-zinc-300">
-              <Droplet size={16} className="text-blue-500" />Nguyên liệu cần dùng
+          {/* Result — ingredient list compact */}
+          <div className="space-y-2">
+            <h3 className="font-semibold text-xs uppercase tracking-wide flex items-center gap-1.5 text-zinc-500 dark:text-zinc-400">
+              <Droplet size={13} className="text-blue-500" />Nguyên liệu cần dùng
             </h3>
-            <div className="space-y-2">
+            <div className="divide-y divide-zinc-100 dark:divide-zinc-800 rounded-xl border border-zinc-200 dark:border-zinc-800 overflow-hidden">
               {activeRecipe.ingredients?.map(ingredient => {
                 const qty = Number(ingredient.quantity);
                 const calculated = ingredient.isScalable ? qty * scaleFactor : qty;
@@ -140,15 +150,17 @@ export const RecipeCalculatorPage = () => {
                 display = parseFloat(display).toString();
 
                 return (
-                  <div key={ingredient.id} className="flex justify-between items-center px-3 py-2.5 rounded-lg bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800">
-                    <div className="flex items-center gap-2 min-w-0">
+                  <div key={ingredient.id} className="flex justify-between items-center px-3 py-2.5 bg-white dark:bg-zinc-950">
+                    <div className="flex items-center gap-1.5 min-w-0">
                       {!ingredient.isScalable && (
-                        <span title="Không thay đổi theo tỷ lệ"><Clock size={12} className="text-muted-foreground flex-shrink-0" /></span>
+                        <span title="Không thay đổi theo tỷ lệ">
+                          <Clock size={11} className="text-muted-foreground flex-shrink-0" />
+                        </span>
                       )}
                       <span className="font-medium text-sm truncate">{ingredient.name}</span>
                     </div>
                     <span className="text-base font-bold text-amber-600 dark:text-amber-500 ml-3 flex-shrink-0 tabular-nums">
-                      {display} <span className="text-sm">{unit}</span>
+                      {display} <span className="text-xs font-medium text-zinc-500">{unit}</span>
                     </span>
                   </div>
                 );
@@ -158,19 +170,19 @@ export const RecipeCalculatorPage = () => {
 
           {/* Steps collapsible */}
           {hasSteps && (
-            <div className="border-t border-zinc-200 dark:border-zinc-800 pt-4">
+            <div className="border-t border-zinc-100 dark:border-zinc-800 pt-3">
               <button
                 onClick={() => setShowSteps(!showSteps)}
-                className="w-full flex items-center justify-between text-sm font-semibold text-zinc-700 dark:text-zinc-300 py-1"
+                className="w-full flex items-center justify-between text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400 py-1"
               >
                 <span>Các bước pha chế ({activeRecipe.steps!.length} bước)</span>
-                {showSteps ? <ChevronUp size={16} className="text-zinc-400" /> : <ChevronDown size={16} className="text-zinc-400" />}
+                {showSteps ? <ChevronUp size={15} className="text-zinc-400" /> : <ChevronDown size={15} className="text-zinc-400" />}
               </button>
               {showSteps && (
-                <ol className="mt-3 space-y-2.5">
+                <ol className="mt-3 space-y-2">
                   {activeRecipe.steps?.map((step, i) => (
                     <li key={step.id} className="flex gap-3 items-start">
-                      <span className="flex-shrink-0 w-6 h-6 flex items-center justify-center text-xs font-bold text-amber-600 bg-amber-50 dark:bg-amber-950/30 rounded-full border border-amber-200 dark:border-amber-800">
+                      <span className="flex-shrink-0 w-5 h-5 flex items-center justify-center text-xs font-bold text-amber-600 bg-amber-50 dark:bg-amber-950/30 rounded-full border border-amber-200 dark:border-amber-800">
                         {step.stepOrder || i + 1}
                       </span>
                       <span className="text-sm text-zinc-600 dark:text-zinc-300 pt-0.5">{step.content}</span>
